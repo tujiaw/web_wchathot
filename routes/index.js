@@ -71,21 +71,33 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-
+var g_typeList = [];
 router.get('/category', function(req, res, next) {
-  showapiRequest('http://route.showapi.com/582-1', 17262, {}, function(json) {
-      if (json.showapi_res_code == 0) {
-        console.log(json.showapi_res_body.typeList);
-        res.render('category', {title: 'Category', typeList: json.showapi_res_body.typeList});
-      } else {
-        console.log(json.showapi_res_error);
-      }
-  });
+  if (g_typeList.length == 0) {
+    showapiRequest('http://route.showapi.com/582-1', 17262, {}, function(json) {
+        if (json.showapi_res_code == 0) {
+          g_typeList = json.showapi_res_body.typeList;
+          res.render('category', {title: 'Category', typeList: g_typeList});
+        } else {
+          console.log(json.showapi_res_error);
+        }
+    });
+  } else {
+    res.render('category', {title: 'Category', typeList: g_typeList});
+  }
 });
 
 router.get('/category/:tid', function(req, res, next) {
   var tid = req.params.tid;
   console.log('tid:' + tid);
+    showapiRequest('http://route.showapi.com/582-2', 17262, {typeId: tid}, function(json) {
+      if (json.showapi_res_code == 0) {
+        var pagebean = json.showapi_res_body.pagebean;
+        res.render('category', {title: 'Category', typeList: g_typeList, pagebean: pagebean});
+      } else {
+        console.log(json.showapi_res_error);
+      }
+  });
 });
 
 module.exports = router;

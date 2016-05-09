@@ -6,13 +6,20 @@
 </head>
 <body>
   <div class="typeList">
-      <ul>
-    <% typeList.forEach(function(type) { %>
-      <li class="typeItem">
-        <a href="/category/<%= type.id %>"><%= type.name %></a>
-      </li>
-    <% }) %>
-  </ul>
+    <ul>
+      <% typeList.forEach(function(type) { %>
+        <li class="typeItem">
+          <a href="/category/<%= type.id %>"><%= type.name %></a>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+  <div class="articleBriefList">
+    <% if (typeof(pagebean) != 'undefined' && pagebean) { %>
+      <% pagebean.contentlist.forEach(function(article) { %>
+        <% include article %>
+      <% }) %>
+    <% } %>
   </div>
 </body>
 </html>
