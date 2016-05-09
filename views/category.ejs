@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+</head>
+<body>
+  <ul>
+    <% typeList.forEach(function(type) { %>
+      <li class="typeItem" id=<%= type.id %>>
+        <%= type.name %>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>
