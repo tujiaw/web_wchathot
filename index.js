@@ -70,4 +70,9 @@ router.get('/category', function(req, res, next) {
   });
 });
 
+router.get('/category/:tid', function(req, res, next) {
+  var tid = req.params.tid;
+  console.log('tid:' + tid);
+});
+
 module.exports = router;

@@ -5,12 +5,14 @@
   <title><%= title %></title>
 </head>
 <body>
-  <ul>
+  <div class="typeList">
+      <ul>
     <% typeList.forEach(function(type) { %>
-      <li class="typeItem" id=<%= type.id %>>
-        <%= type.name %>
+      <li class="typeItem">
+        <a href="/category/<%= type.id %>"><%= type.name %></a>
       </li>
     <% }) %>
   </ul>
+  </div>
 </body>
 </html>

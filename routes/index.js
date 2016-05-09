@@ -21,24 +21,25 @@ function curDate() {
         leftPad(date.getSeconds(), 2);
 }
 
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-router.get('/category', function(req, res, next) {
-  var url = 'http://route.showapi.com/582-1?';
+var showapiRequest = function(mainUrl, appId, appParams, callback) {
+  var url = new String(mainUrl + '?');
   var params = {
-    showapi_appid: 17262,
+    showapi_appid: appId,
     showapi_timestamp: curDate(),
     showapi_sign_method: 'md5',
     showapi_res_gzip: 1
   };
+
+  appParams = appParams || {};
+  for (var appParam in appParams) {
+    params[appParam] = appParams[appParam];
+  }
+
   var keys = [];
-  for (param in params) {
+  for (var param in params) {
     keys.push(param);
   }
+
   keys.sort();
   var sortResult = '';
   keys.map(function(value) {
@@ -58,16 +59,34 @@ router.get('/category', function(req, res, next) {
     });
     saRes.on('end', () => {
       var json = JSON.parse(saData);
+      callback(json);
+    });
+  }).on('error', (saErr) => {
+    console.log(saErr);
+  });
+};
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
+
+
+router.get('/category', function(req, res, next) {
+  showapiRequest('http://route.showapi.com/582-1', 17262, {}, function(json) {
       if (json.showapi_res_code == 0) {
         console.log(json.showapi_res_body.typeList);
         res.render('category', {title: 'Category', typeList: json.showapi_res_body.typeList});
       } else {
         console.log(json.showapi_res_error);
       }
-    });
-  }).on('error', (saErr) => {
-    console.log(saErr);
   });
 });
 
+router.get('/category/:tid', function(req, res, next) {
+  var tid = req.params.tid;
+  console.log('tid:' + tid);
+});
+
 module.exports = router;
+
