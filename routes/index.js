@@ -21,83 +21,110 @@ function curDate() {
         leftPad(date.getSeconds(), 2);
 }
 
-var showapiRequest = function(mainUrl, appId, appParams, callback) {
-  var url = new String(mainUrl + '?');
-  var params = {
-    showapi_appid: appId,
-    showapi_timestamp: curDate(),
-    showapi_sign_method: 'md5',
-    showapi_res_gzip: 1
-  };
+var showapiRequest = function(mainUrl, appId, appParams) {
+  return new Promise(function(resolve, reject) {
+    var url = new String(mainUrl + '?');
+    var params = {
+      showapi_appid: appId,
+      showapi_timestamp: curDate(),
+      showapi_sign_method: 'md5',
+      showapi_res_gzip: 1
+    };
 
-  appParams = appParams || {};
-  for (var appParam in appParams) {
-    params[appParam] = appParams[appParam];
-  }
+    appParams = appParams || {};
+    for (var appParam in appParams) {
+      params[appParam] = appParams[appParam];
+    }
 
-  var keys = [];
-  for (var param in params) {
-    keys.push(param);
-  }
+    var keys = [];
+    for (var param in params) {
+      keys.push(param);
+    }
 
-  keys.sort();
-  var sortResult = '';
-  keys.map(function(value) {
-    sortResult = sortResult + value + params[value];
-  });
-  var secret = '21b693f98bd64e71a9bdbb5f7c76659c';
-  var sign = md5(sortResult + secret);
-  keys.map(function(value) {
-    url = url + value + '=' + params[value] + '&';
-  });
-  url = url + 'showapi_sign=' + sign;
-  console.log('url:' + url);
-  http.get(url, (saRes) => {
-    var saData = '';
-    saRes.on('data', (chunk) => {
-      saData = saData + chunk;
+    keys.sort();
+    var sortResult = '';
+    keys.map(function(value) {
+      sortResult = sortResult + value + params[value];
     });
-    saRes.on('end', () => {
-      var json = JSON.parse(saData);
-      callback(json);
+    var secret = '21b693f98bd64e71a9bdbb5f7c76659c';
+    var sign = md5(sortResult + secret);
+    keys.map(function(value) {
+      url = url + value + '=' + params[value] + '&';
     });
-  }).on('error', (saErr) => {
-    console.log(saErr);
+    url = url + 'showapi_sign=' + sign;
+    console.log('url:' + url);
+    http.get(url, (saRes) => {
+      var saData = '';
+      saRes.on('data', (chunk) => {
+        saData = saData + chunk;
+      });
+      saRes.on('end', () => {
+        var json = JSON.parse(saData);
+        resolve(json);
+      });
+    }).on('error', (saErr) => {
+      reject(saErr);
+    });
   });
 };
+
+var g_typeList = [];
+var g_pagebean = {};
+function getTypeList() {
+  return new Promise(function(resolve, reject) {
+      if (g_typeList.length == 0) {
+        showapiRequest('http://route.showapi.com/582-1', 17262, {}).then(function(json) {
+            if (json.showapi_res_code == 0) {
+              g_typeList = json.showapi_res_body.typeList;
+              resolve();
+            } else {
+              reject(json.showapi_res_error);
+            }
+        }).catch(function(err) {
+          reject(err);
+        });
+      } else {
+        resolve();
+      }
+  });
+}
+
+function getArticleList(appParams) {
+  return new Promise(function(resolve, reject) {
+    if (typeof g_pagebean != 'undefined' &&  g_pagebean.contentlist &&
+        g_pagebean.contentlist.length > 0 && g_pagebean.contentlist[0].typeId == appParams.typeId) {
+        resolve();
+    } else {
+      console.log(appParams);
+      showapiRequest('http://route.showapi.com/582-2', 17262, appParams).then(function(json) {
+        if (json.showapi_res_code == 0) {
+          g_pagebean = json.showapi_res_body.pagebean;
+          resolve();
+        } else {
+          reject(json.showapi_res_error);
+        }
+      }).catch(function(err) {
+        reject(err);
+      })
+    }
+  });
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-var g_typeList = [];
 router.get('/category', function(req, res, next) {
-  if (g_typeList.length == 0) {
-    showapiRequest('http://route.showapi.com/582-1', 17262, {}, function(json) {
-        if (json.showapi_res_code == 0) {
-          g_typeList = json.showapi_res_body.typeList;
-          res.render('category', {title: 'Category', typeList: g_typeList});
-        } else {
-          console.log(json.showapi_res_error);
-        }
-    });
-  } else {
-    res.render('category', {title: 'Category', typeList: g_typeList});
-  }
+  res.redirect('/category/0');
 });
 
 router.get('/category/:tid', function(req, res, next) {
-  var tid = req.params.tid;
-  console.log('tid:' + tid);
-    showapiRequest('http://route.showapi.com/582-2', 17262, {typeId: tid}, function(json) {
-      if (json.showapi_res_code == 0) {
-        var pagebean = json.showapi_res_body.pagebean;
-        console.log(pagebean);
-        res.render('category', {title: 'Category', typeList: g_typeList, pagebean: pagebean});
-      } else {
-        console.log(json.showapi_res_error);
-      }
+  var typeId = req.params.tid;
+  Promise.all([getTypeList(), getArticleList({typeId: typeId})]).then(function() {
+    res.render('category', {title: 'Category', typeList: g_typeList, pagebean: g_pagebean});
+  }).catch(function(err) {
+    console.log(err);
   });
 });
 

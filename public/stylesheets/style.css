@@ -20,7 +20,8 @@ a {
 .typeList {
   background: #bebebe;
   width: 150px;
-  float: right;
+  float: left;
+  margin-top: 50px;
 }
 
 .articleList {
