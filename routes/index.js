@@ -93,6 +93,7 @@ router.get('/category/:tid', function(req, res, next) {
     showapiRequest('http://route.showapi.com/582-2', 17262, {typeId: tid}, function(json) {
       if (json.showapi_res_code == 0) {
         var pagebean = json.showapi_res_body.pagebean;
+        console.log(pagebean);
         res.render('category', {title: 'Category', typeList: g_typeList, pagebean: pagebean});
       } else {
         console.log(json.showapi_res_error);

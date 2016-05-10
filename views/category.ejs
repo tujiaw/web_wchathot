@@ -4,24 +4,29 @@
   <meta charset="UTF-8">
   <title>Document</title>
   <%- include header %>
-
 </head>
 <body>
-  <div class="typeList">
-    <ul>
-      <% typeList.forEach(function(type) { %>
-        <li class="typeItem">
-          <a href="/category/<%= type.id %>"><%= type.name %></a>
-        </li>
-      <% }) %>
-    </ul>
-  </div>
-  <div class="articleBriefList">
-    <% if (typeof(pagebean) != 'undefined' && pagebean) { %>
-      <% pagebean.contentlist.forEach(function(article) { %>
-        <% include article %>
-      <% }) %>
-    <% } %>
+  <div id="main">
+    <div class="typeList">
+      <ul>
+        <% typeList.forEach(function(type) { %>
+          <li class="typeItem">
+            <a href="/category/<%= type.id %>"><%= type.name %></a>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+    <div class="articleList">
+      <% if (typeof(pagebean) != 'undefined' && pagebean) { %>
+        <% if (pagebean.contentlist.length > 0) { %>
+          <span id="currentType">> <%= pagebean.contentlist[0].typeName%></span>
+        <% } %>
+        
+        <% pagebean.contentlist.forEach(function(article) { %>
+          <% include article %>
+        <% }) %>
+      <% } %>
+    </div>
   </div>
 </body>
 </html>
