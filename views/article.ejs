@@ -1,11 +1,12 @@
-<div class="articleBrief">
-    <img src="<%= article.contentImg %>" />
-    <div class="articleTitle" url="<%= article.url %>">
-        <span class="userName">
-            <%= article.userName %>
-        </span>
-        <span class="title">
-            <%= article.title %>
-        </span>
+<div id="articleList">
+    <img src="<%= article.contentImg %>" >
+    <div id="articleContent" url="<%= article.url %>">
+      <div id="userName">
+        <%= article.userName %>
+      </div>
+      <div id="title">
+        <%= article.title %>
+      </div>
     </div>
+    <div id="clearBoth"></div>
 </div>
