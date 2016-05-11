@@ -76,6 +76,9 @@ function getTypeList() {
         showapiRequest('http://route.showapi.com/582-1', 17262, {}).then(function(json) {
             if (json.showapi_res_code == 0) {
               g_typeList = json.showapi_res_body.typeList;
+              g_typeList.sort(function(left, right) {
+                return left.id - right.id;
+              });
               resolve();
             } else {
               reject(json.showapi_res_error);
@@ -92,14 +95,19 @@ function getTypeList() {
 function getArticleList(appParams) {
   return new Promise(function(resolve, reject) {
     if (typeof g_pagebean != 'undefined' &&  g_pagebean.contentlist &&
-        g_pagebean.contentlist.length > 0 && g_pagebean.contentlist[0].typeId == appParams.typeId) {
+        g_pagebean.contentlist.length > 0 && g_pagebean.contentlist[0].typeId == appParams.typeId && g_pagebean.currentPage == appParams.page) {
         resolve();
     } else {
       console.log(appParams);
       showapiRequest('http://route.showapi.com/582-2', 17262, appParams).then(function(json) {
         if (json.showapi_res_code == 0) {
           g_pagebean = json.showapi_res_body.pagebean;
-          resolve();
+          //console.log(g_pagebean);
+          if (g_pagebean.contentlist.length > 0) {
+            resolve();
+          } else {
+            reject('content is empty!');
+          }
         } else {
           reject(json.showapi_res_error);
         }
@@ -116,16 +124,23 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/category', function(req, res, next) {
-  res.redirect('/category/0');
-});
-
-router.get('/category/:tid', function(req, res, next) {
-  var typeId = req.params.tid;
-  Promise.all([getTypeList(), getArticleList({typeId: typeId})]).then(function() {
+  console.log(req.query);
+  var typeId = req.query.typeid || 0;
+  var page = req.query.page || 1;
+  var appParams = {
+    typeId: typeId,
+    page: page
+  };
+  Promise.all([getTypeList(), getArticleList(appParams)]).then(function() {
     res.render('category', {title: 'Category', typeList: g_typeList, pagebean: g_pagebean});
   }).catch(function(err) {
-    console.log(err);
+    res.end(err);
   });
+});
+
+router.post('/log', function(req, res, next) {
+  console.log(req.body.text);
+  res.send('ok');
 });
 
 module.exports = router;

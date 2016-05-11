@@ -18,13 +18,15 @@ a {
 }
 
 .typeList {
-  background: #bebebe;
+  background: #eeeeee;
   width: 150px;
+  height: 450px;
   float: left;
-  margin-top: 50px;
+  padding-top: 20px;
 }
 
 .articleList {
+  background: #f7f7f7;
   float: left;
   margin-left: 15px;
 }
@@ -53,4 +55,11 @@ a {
 .articleItem #userName {
   font-weight: bold;
   margin-top: 10px;
+}
+
+.pageButton {
+  float: right;
+}
+a.disabled {
+  pointer-events: none;
 }

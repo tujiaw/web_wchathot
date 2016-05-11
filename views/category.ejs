@@ -11,7 +11,7 @@
       <ul>
         <% typeList.forEach(function(type) { %>
           <li class="typeItem">
-            <a href="/category/<%= type.id %>"><%= type.name %></a>
+            <a href="/category?typeid=<%= type.id %>"><%= type.name %></a>
           </li>
         <% }) %>
       </ul>
@@ -19,7 +19,19 @@
     <div class="articleList">
       <% if (typeof(pagebean) != 'undefined' && pagebean) { %>
         <% if (pagebean.contentlist.length > 0) { %>
+          <%
+            var curTypeId = parseInt(pagebean.contentlist[0].typeId);
+            var curPage = parseInt(pagebean.currentPage);
+          %>
           <span id="currentType">> <%= pagebean.contentlist[0].typeName%></span>
+          <div class="pageButton">
+            <% if (curPage <= 1) { %>
+              <a href="#" class="disabled" onclick="return false;">上一页</a>
+            <% } else { %>
+              <a href="/category?typeid=<%= curTypeId %>&page=<%= curPage-1%>" class="prePage">上一页</a>
+            <% } %>
+            <a href="category?typeid=<%= curTypeId%>&page=<%= curPage+1%>" class="nextPage">下一页</a>
+          </div>
         <% } %>
         
         <% pagebean.contentlist.forEach(function(article) { %>
