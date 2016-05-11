@@ -1,12 +1,15 @@
 body {
-  margin: 0px;
-  padding: 0px;
+  margin: 20px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 #main {
   margin: 0 auto;
   width: 600px;
+}
+
+#main>#title {
+  text-align: center;
 }
 
 a {
@@ -17,22 +20,35 @@ a {
   clear: both;
 }
 
-.typeList {
+.typePanel {
   background: #eeeeee;
-  width: 150px;
-  height: 450px;
+  width: 130px;
+  height: 550px;
   float: left;
   padding-top: 20px;
 }
 
-.articleList {
+.typeItem {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.articlePanel {
   background: #f7f7f7;
   float: left;
-  margin-left: 15px;
+  height: 550px;
+  
+}
+
+.articleList {
+  height: 530px;
+  overflow-y: scroll;
 }
 
 .articleItem {
   height: 60px;
+  padding-left: 10px;
+  padding-right: 10px;
   cursor: pointer;
 }
 
@@ -58,6 +74,7 @@ a {
 }
 
 .pageButton {
+  padding-right: 10px;
   float: right;
 }
 a.disabled {

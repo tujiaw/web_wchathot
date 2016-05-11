@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>wchat hot</title>
   <%- include header %>
 </head>
 <body>
   <div id="main">
     <h4 id="title">微信热门精选</h4>
-    <div class="typeList">
+    <div class="typePanel">
       <ul>
         <% typeList.forEach(function(type) { %>
           <li class="typeItem">
@@ -17,14 +17,14 @@
         <% }) %>
       </ul>
     </div>
-    <div class="articleList">
+    <div class="articlePanel">
       <% if (typeof(pagebean) != 'undefined' && pagebean) { %>
         <% if (pagebean.contentlist.length > 0) { %>
           <%
             var curTypeId = parseInt(pagebean.contentlist[0].typeId);
             var curPage = parseInt(pagebean.currentPage);
           %>
-          <span id="currentType">> <%= pagebean.contentlist[0].typeName%></span>
+          <span id="currentType"> &nbsp;&nbsp;< <%= pagebean.contentlist[0].typeName%> </span>
           <div class="pageButton">
             <% if (curPage <= 1) { %>
               <a href="#" class="disabled" onclick="return false;">上一页</a>
@@ -34,10 +34,11 @@
             <a href="category?typeid=<%= curTypeId%>&page=<%= curPage+1%>" class="nextPage">下一页</a>
           </div>
         <% } %>
-        
-        <% pagebean.contentlist.forEach(function(article) { %>
-          <% include article %>
-        <% }) %>
+        <div class="articleList">
+          <% pagebean.contentlist.forEach(function(article) { %>
+              <% include article %>
+          <% }); %>
+        </div>
       <% } %>
     </div>
   </div>
