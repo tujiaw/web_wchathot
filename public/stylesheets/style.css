@@ -1,11 +1,11 @@
 body {
-  margin: 20px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 #main {
   margin: 0 auto;
-  width: 600px;
+  padding: 0px;
+  background:#f7f7f7;
 }
 
 #main>#title {
@@ -22,16 +22,12 @@ body {
   background: #eeeeee;
   width: 130px;
   float: left;
-  padding-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .typeItem {
   margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.articlePanel {
-  background: #f7f7f7;
 }
 
 .articleList {
@@ -60,6 +56,7 @@ body {
 .articleItem>#content {
   padding-left: 15px;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .articleItem #userName {
@@ -68,7 +65,7 @@ body {
 }
 
 .pageButton {
-  padding-right: 10px;
+  padding-right: 15px;
   float: right;
 }
 
