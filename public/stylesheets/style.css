@@ -9,11 +9,10 @@ body {
 }
 
 #main>#title {
-  text-align: center;
-}
-
-a {
-  color: #00B7FF;
+  height: 30px;
+  padding-top: 5px;
+  margin-right: 18px;
+  margin-bottom: 0px;
 }
 
 #clearBoth {
@@ -23,7 +22,6 @@ a {
 .typePanel {
   background: #eeeeee;
   width: 130px;
-  height: 550px;
   float: left;
   padding-top: 20px;
 }
@@ -36,12 +34,10 @@ a {
 .articlePanel {
   background: #f7f7f7;
   float: left;
-  height: 550px;
-  
 }
 
 .articleList {
-  height: 530px;
+  height: 510px;
   overflow-y: scroll;
 }
 
@@ -77,6 +73,7 @@ a {
   padding-right: 10px;
   float: right;
 }
+
 a.disabled {
   pointer-events: none;
 }

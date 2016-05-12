@@ -144,5 +144,9 @@ router.post('/log', function(req, res, next) {
   res.send('ok');
 });
 
+router.get('/test', function(req, res, next) {
+  res.render('test');
+})
+
 module.exports = router;
 

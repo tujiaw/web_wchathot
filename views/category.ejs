@@ -8,8 +8,8 @@
   <%- include header %>
 </head>
 <body>
-  <div id="main">
-    <h4 id="title">微信热门精选</h4>
+  <div id="main" class="container">
+    <h4 id="title" class="alert-success text-center">微信热门精选</h4>
     <div class="typePanel">
       <ul>
         <% typeList.forEach(function(type) { %>
@@ -29,7 +29,7 @@
           <span id="currentType"> &nbsp;&nbsp;< <%= pagebean.contentlist[0].typeName%> </span>
           <div class="pageButton">
             <% if (curPage <= 1) { %>
-              <a href="#" class="disabled" onclick="return false;">上一页</a>
+              <a href="#" class="disabled text-muted" onclick="return false;">上一页</a>
             <% } else { %>
               <a href="/category?typeid=<%= curTypeId %>&page=<%= curPage-1%>" class="prePage">上一页</a>
             <% } %>
