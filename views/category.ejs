@@ -8,41 +8,36 @@
   <%- include header %>
 </head>
 <body>
-  <div id="main" class="container">
-    <h4 id="title" class="alert-success text-center">微信热门精选</h4>
-    <div class="typePanel">
-      <ul>
-        <% typeList.forEach(function(type) { %>
-          <li class="typeItem">
-            <a href="/category?typeid=<%= type.id %>"><%= type.name %></a>
-          </li>
-        <% }) %>
-      </ul>
-    </div>
-    <div class="articlePanel">
-      <% if (typeof(pagebean) != 'undefined' && pagebean) { %>
-        <% if (pagebean.contentlist.length > 0) { %>
-          <%
-            var curTypeId = parseInt(pagebean.contentlist[0].typeId);
-            var curPage = parseInt(pagebean.currentPage);
-          %>
-          <span id="currentType"> &nbsp;&nbsp;< <%= pagebean.contentlist[0].typeName%> </span>
-          <div class="pageButton">
-            <% if (curPage <= 1) { %>
-              <a href="#" class="disabled text-muted" onclick="return false;">上一页</a>
-            <% } else { %>
-              <a href="/category?typeid=<%= curTypeId %>&page=<%= curPage-1%>" class="prePage">上一页</a>
-            <% } %>
-            <a href="category?typeid=<%= curTypeId%>&page=<%= curPage+1%>" class="nextPage">下一页</a>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div id="main" class="col-md-6">
+      <h4 id="title" class="alert-success text-center">微信热门精选</h4>
+
+      <div class="typePanel">
+        <ul>
+          <% typeList.forEach(function(type) { %>
+            <li class="typeItem">
+              <a href="/category?typeid=<%= type.id %>"><%= type.name %></a>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <div class="articlePanel">
+        <% if (typeof(pagebean) != 'undefined' && pagebean && pagebean.contentlist.length > 0) { %>
+          <% include pageButton %>
+          <div class="articleList">
+            <% pagebean.contentlist.forEach(function(article) { %>
+                <% include article %>
+            <% }); %>
           </div>
         <% } %>
-        <div class="articleList">
-          <% pagebean.contentlist.forEach(function(article) { %>
-              <% include article %>
-          <% }); %>
-        </div>
-      <% } %>
-    </div>
-  </div>
+      </div>
+
+      </div> <!-- main -->
+      <div class="col-md-3"></div>
+    </div> <!-- row -->
+  </div> <!-- container -->
 </body>
 </html>

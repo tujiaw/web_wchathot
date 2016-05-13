@@ -1,0 +1,13 @@
+<%
+  var curTypeId = parseInt(pagebean.contentlist[0].typeId);
+  var curPage = parseInt(pagebean.currentPage);
+%>
+<span id="currentType"> &nbsp;&nbsp;< <%= pagebean.contentlist[0].typeName%> </span>
+<div class="pageButton">
+  <% if (curPage <= 1) { %>
+    <a href="#" class="disabled text-muted" onclick="return false;">上一页</a>
+  <% } else { %>
+    <a href="/category?typeid=<%= curTypeId %>&page=<%= curPage-1%>" class="prePage">上一页</a>
+  <% } %>
+  <a href="category?typeid=<%= curTypeId%>&page=<%= curPage+1%>" class="nextPage">下一页</a>
+</div>
